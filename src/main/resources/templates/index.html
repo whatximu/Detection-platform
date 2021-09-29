@@ -1,0 +1,142 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<title>登录</title>
+	<!-- Meta tags -->
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="Gadget Sign Up Form Responsive Widget, Audio and Video players, Login Form Web Template, Flat Pricing Tables, Flat Drop-Downs, Sign-Up Web Templates, Flat Web Templates, Login Sign-up Responsive Web Template, Smartphone Compatible Web Template, Free Web Designs for Nokia, Samsung, LG, Sony Ericsson, Motorola Web Design"
+	/>
+	<script>
+		addEventListener("load", function () { setTimeout(hideURLbar, 0); }, false); function hideURLbar() { window.scrollTo(0, 1); }
+	</script>
+	<!-- Meta tags -->
+	<!-- font-awesome icons -->
+	<link href="../static/demo2/css/font-awesome.min.css" rel="stylesheet">
+	<!-- //font-awesome icons -->
+	<!--stylesheets-->
+	<link href="../static/demo2/css/style.css" rel='stylesheet' type='text/css' media="all">
+	<!--//style sheet end here-->
+	<link href="//fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+</head>
+<body>
+<!--<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>-->
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<h1 class="error">Sign In Here</h1>
+<!---728x90--->
+<div class="w3layouts-two-grids">
+	<!---728x90--->
+	<div class="mid-class">
+		<div class="img-right-side">
+			<h3>Always, right?</h3>
+			<p>Never give up, Never lose hope. Always have faith, It allows you to cope. Trying times will pass, As they always do. Just have patience, Your dreams will come true. So put on a smile, You'll live through your pain. Know it will pass, And strength you will gain
+			</p>
+			<img src="../static/demo2/images/b11.png" class="img-fluid" alt="">
+		</div>
+		<div class="txt-left-side">
+			<h2> SIGN IN </h2>
+			<form >
+				<div class="form-left-to-w3l">
+					<span class="fa fa-user-o" aria-hidden="true"></span>
+					<input type="text" name="username" id="username" placeholder=" Name" required="">
+
+					<div class="clear"></div>
+				</div>
+				<div class="form-left-to-w3l ">
+
+					<span class="fa fa-lock" aria-hidden="true"></span>
+					<input type="password" name="userpwd" id="userpwd" placeholder="Password" required="">
+					<div class="clear"></div>
+				</div>
+
+			</form>
+
+			<button onclick="login()" id="signIn">Sign In </button>
+
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>
+<!---728x90--->
+<footer class="copyrigh-wthree">
+	<p>
+		© 2021 Undo_XPra and Wonder
+
+	</p>
+</footer>
+
+<style>
+	#signIn{
+		font-size: 15px;
+		padding: 19px 20px;
+		margin: 53px 0px;
+		background: #67e878;
+		outline: none;
+		color: #fff;
+		font-weight: 600;
+		border: none;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+		cursor: pointer;
+		width: 100%;
+		border-radius: 10px;
+		transition: 0.5s all;
+		-webkit-transition: 0.5s all;
+		-o-transition: 0.5s all;
+		-moz-transition: 0.5s all;
+		-ms-transition: 0.5s all;
+		box-shadow: 0px 0px 8px 0px #60f574;
+	}
+</style>
+
+<script language="javascript">
+
+	function login(){
+		var username=document.getElementById('username').value;
+		var userpwd =document.getElementById('userpwd').value;
+
+		var a= {"username":username,"userpwd":userpwd};
+		console.log(a)
+		$.ajax({
+			url : 'http://localhost:8081/UNDO/user_check',// 获取自己系统后台用户信息接口
+			data :JSON.stringify(a),
+			type : "POST",
+			dataType: "json",
+			contentType: "application/json; charset=utf-8",
+			success : function(data) {
+
+				if (data.code=="1") { //判断返回值，这里根据的业务内容可做调整
+
+					$.cookie("name",data.data);
+					$.cookie("username",username);
+					var idn = data.identity;
+					var twoUrl;
+					if (0 === idn){
+						twoUrl = encodeURI("../USER/list.html"); //使用encodeURI编码
+					}
+					if (1 === idn){
+						twoUrl = encodeURI("../USER/adminTable.html");
+					}
+					if (2 === idn) {
+						twoUrl = encodeURI("../USER/rootTable.html");
+					}
+
+					location.href = twoUrl;
+
+				} else {
+					showMsg(data.msg);//显示登录失败的原因
+					return false;
+				}
+			}
+
+		});
+	}
+</script>
+</body>
+
+</html>

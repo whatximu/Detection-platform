@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XX检测平台</title>
+    <link rel="icon" href="../../static/demo1/img/013.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all"/>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body class="layui-layout-body">
+
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/jquery.cookie.js"></script>
+
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" >
+        <ul class="layui-nav" >
+            <li class="layui-nav-item">
+                <a href="http://localhost:8081/USER/form.html">问题上传</a></li>
+            <li class="layui-nav-item">
+                <a href="http://localhost:8081/USER/list.html">问题查看</a></li>
+            <li class="layui-nav-item">
+                <a href="http://localhost:8081/USER/repairTable.html">售后维修</a></li>
+
+        </ul>
+
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;" id="usernameinfo">
+
+                </a>
+
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="http://localhost:8081/">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-tab layui-tab-brief" lay-filter="demoTitle">
+        <div class="layui-body layui-tab-content site-demo site-demo-body">
+
+            <div id="el-form-steps">
+
+
+                <div class="layui-tab-item layui-show">
+
+                    <el-steps  finish-status="success" simple>
+<!--                        <el-step title="基本信息" ></el-step>-->
+<!--                        <el-step title="相关情况" ></el-step>-->
+                    </el-steps>
+                    <div class="layui-main">
+                        <div id="LAY_preview">
+                            <div style="height: 10px"></div>
+                            <el-table
+                                    :data="tableData"
+                                    style="width: 100%">
+                                <el-table-column
+                                        label="id"
+                                        prop="id">
+                                </el-table-column>
+                                <el-table-column
+                                        label="网点名称"
+                                        prop="webname">
+                                </el-table-column>
+                                <el-table-column
+                                        label="车辆品牌"
+                                        prop="carbrand">
+                                </el-table-column>
+                                <el-table-column
+                                        label="动力配置"
+                                        prop="carconfig">
+                                </el-table-column>
+                                <el-table-column
+                                        label="车辆VIN"
+                                        prop="carVIN">
+                                </el-table-column>
+                                <el-table-column
+                                        label="上报时间"
+                                        prop="reportdate">
+                                </el-table-column>
+                                <el-table-column
+                                        align="right">
+
+                                    <template slot-scope="scope">
+                                        <el-button
+                                                size="mini"
+                                                @click="handleinto1(scope.$index, scope.row)">处理进度</el-button>
+                                        <el-button
+                                                size="mini"
+                                                type="danger"
+                                                @click="handleinto2(scope.$index, scope.row)">诊断结果</el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+
+                        </div>
+                    </div>
+
+                    <div class="layui-tab-item">
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="../../static/layui/layui.js" charset="utf-8"></script>
+
+
+<style>
+    .el-dropdown-link {
+        cursor: pointer;
+        color: #eee;
+    }
+
+    .el-icon-arrow-down {
+        font-size: 12px;
+    }
+
+    #LAY_layedit_code {
+        text-align: center;
+    }
+
+    .layui-tab-item{
+        width: 1090px;
+        display: none;
+    }
+    .el-step__title.is-process {
+        font-weight: 700;
+        color: #409eff;
+    }
+    .el-step__title.is-wait {
+        color: #303133;
+    }
+    .el-step__head.is-process {
+        color: #409eff;
+        border-color: #409eff;
+    }
+    .el-step__head.is-wait{
+        color: #303133;
+        border-color: #303133;
+    }
+</style>
+
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!--&lt;!&ndash; import JavaScript &ndash;&gt;-->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<script>
+
+    var username=$.cookie('username');
+    var name=$.cookie('name');
+    var usr={"username":username}
+    var result_get;
+
+    var waya;
+    var resultaa;
+    app()
+
+
+    function Pusha() {
+
+        $.ajax({
+            url:"http://localhost:8081/result/get",
+            data:JSON.stringify(usr),
+            type: "POST",
+            async: true,
+            dataType:"json",
+            contentType: "application/json; charset=utf-8",
+
+            success:function(result){
+
+                // json = JSON.parse(result.describe);
+
+                $.cookie("code_xpra",result.code);
+                $.cookie("percent",result.active_percent);
+                $.cookie("describe",JSON.stringify(result.describe));
+                Dialog.alert(JSON.stringify(result.describe))
+                console.log(result.describe)
+
+            },
+
+        })
+
+    }
+    function resulta() {
+
+        $.ajax({
+            url:"http://localhost:8081/result/get_result",
+            data:JSON.stringify(usr),
+            type: "POST",
+            async: true,
+            dataType:"json",
+            contentType: "application/json; charset=utf-8",
+
+            success:function(result){
+
+                console.log(waya,resultaa)
+                waya=result.way;
+                resultaa=result.result;
+
+            },
+
+        })
+
+
+
+    }
+function app(){
+    $.ajax({
+        url:"http://localhost:8081/form/list",
+        data:JSON.stringify(usr),
+        type: "POST",
+
+        dataType:"json",
+        contentType: "application/json; charset=utf-8",
+
+        success:function(result){
+
+            result_get=result.list
+            console.log(result_get);
+
+        },
+
+    });
+}
+
+    var str= '<img src="../../static/userimage/0.jpg" class="layui-nav-img" >'+name
+    document.getElementById("usernameinfo").innerHTML=str;
+
+    setTimeout(function() {
+            var Main = {
+
+                data() {
+
+                    return {
+                        tableData: result_get
+
+                    }
+                },
+
+                methods: {
+                    handleCommand(command) {
+                        this.$message('click on item ' + command);
+                        var twoUrl2 = encodeURI(command+".html"); //使用encodeURI编码
+                        location.href = twoUrl2;
+                    },
+                    handleinto1(index, row) {
+
+                        console.log(index, row.__ob__.value.id);
+                        usr={"username":username,"id":row.__ob__.value.id}
+                        $.cookie("id",row.__ob__.value.id);
+                        // Pusha();
+                        console.log($.cookie("describe"))
+                        setTimeout(function(){ console.log("Hello"); }, 500);
+
+                        var twoUrl = encodeURI("result.html"); //使用encodeURI编码
+                        location.href = twoUrl;
+
+                    },
+                    handleinto2(index, row) {
+                        console.log(index, row.__ob__.value.id);
+                        usr={"username":username,"id":row.__ob__.value.id}
+                        $.cookie("id",row.__ob__.value.id);
+                        resulta()
+                        this.$alert(resultaa, waya, {
+                            confirmButtonText: '知悉',
+                            callback: action => {
+                                this.$message({
+                                    type: 'info',
+                                    message: `action: ${ action }`
+                                });
+                            }
+                        })
+                    }
+
+                }
+            }
+            var Ctor = Vue.extend(Main)
+            var Ctor2 = Vue.extend(Main)
+            new Ctor().$mount('#el-form-steps')
+            new Ctor2().$mount('#xpra')
+        },
+        2000);
+
+
+</script>
+</html>

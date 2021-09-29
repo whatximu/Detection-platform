@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>异响检测平台</title>
+    <link rel="icon" href="../../static/demo1/img/013.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all"/>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body class="layui-layout-body">
+<!--<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>-->
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/jquery.cookie.js"></script>
+
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" >
+        <ul class="layui-nav" >
+            <li class="layui-nav-item">
+                <a href="http://101.37.66.239:8081/USER/form.html">问题上传</a></li>
+            <li class="layui-nav-item">
+                <a href="http://101.37.66.239:8081/USER/list.html">问题查看</a></li>
+            <li class="layui-nav-item">
+                <a href="http://101.37.66.239:8081/USER/repairTable.html">售后维修</a></li>
+
+        </ul>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;" id="usernameinfo">
+
+                </a>
+
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="http://101.37.66.239:8081/">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-tab layui-tab-brief" lay-filter="demoTitle">
+        <div class="layui-body layui-tab-content site-demo site-demo-body">
+
+            <div id="el-form-steps">
+
+
+                <div class="layui-tab-item layui-show">
+
+                    <el-steps :active="active" finish-status="success" simple>
+                        <el-step title="基本信息" ></el-step>
+                        <el-step title="相关情况" ></el-step>
+                    </el-steps>
+                    <div class="layui-main">
+                        <div id="LAY_preview">
+                            
+                            <div style="height: 10px"></div>
+                            <el-form ref="form" :model="form" label-width="100px" class="layui-form" action="">
+
+
+
+                                <div v-if="active==0" >
+                                    <div  style="display:none" >
+                                        <el-row style="height: 60px">
+                                            <el-col :span="8" style="height: 40px;width:1020px">
+                                                <el-form-item label="id" >
+                                                    <el-input v-model="form.xprax" id="usernamea" style="line-height: 40px"></el-input>
+
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                    </div>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="网点名称" >
+                                                <el-input v-model="form.webname" style="line-height: 40px"></el-input>
+
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="当地气温">
+                                                <el-input v-model="form.airnumer" style="width:200px;"/>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="上报日期">
+                                                <el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="form.reportdate"
+                                                                style="width:200px;"></el-date-picker>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="车辆品牌">
+                                                <el-input v-model="form.carbrand" style="width:200px;"/>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="动力配置">
+                                                <el-input v-model="form.carconfig" style="width:200px;"/>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="车辆VIN">
+                                                <el-input v-model="form.carVIN" style="width:200px;"/>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="行驶里程">
+                                                <el-input v-model="form.mileage" style="width:200px;"/>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="发动机号">
+                                                <el-input v-model="form.engineid" style="width:200px;"/>
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="变速箱号">
+                                                <el-input v-model="form.gearboxid" style="width:200px;"/>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="是否改装">
+                                                <el-radio-group v-model="form.refit">
+                                                    <el-radio label="是" @change="open1"></el-radio>
+                                                    <el-radio label="否"></el-radio>
+                                                </el-radio-group>
+                                            </el-form-item>
+                                        </el-col>
+
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="维修经历">
+                                                <el-radio-group v-model="form.maintain">
+                                                    <el-radio label="有" @change="open2"></el-radio>
+                                                    <el-radio label="无"></el-radio>
+                                                </el-radio-group>
+                                            </el-form-item>
+                                        </el-col>
+
+                                    </el-row>
+
+                                    <el-row style="height: 100px">
+                                        <el-col :span="8" style="width:1020px">
+                                            <el-form-item label="问题描述">
+                                                <el-input :rows=3 type="textarea" v-model="form.desc"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                </div>
+
+                                <div v-if="active==1" id="active1">
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="发动机状态">
+                                                <el-checkbox-group v-model="form.condition">
+                                                    <el-checkbox label="冷机" name="cold"></el-checkbox>
+                                                    <el-checkbox label="暖机" name="warm"></el-checkbox>
+                                                    <el-checkbox label="热机" name="hot"></el-checkbox>
+                                                </el-checkbox-group>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="负荷">
+                                                <el-checkbox-group v-model="form.load">
+                                                    <el-checkbox label="空调" name="aircond"></el-checkbox>
+                                                    <el-checkbox label="大灯" name="headlamp"></el-checkbox>
+                                                    <el-checkbox label="前窗加热" name="front"></el-checkbox>
+                                                    <el-checkbox label="后窗加热" name="rear"></el-checkbox>
+                                                    <el-checkbox label="座椅加热" name="seat"></el-checkbox>
+                                                </el-checkbox-group>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="工况">
+
+                                                <el-checkbox-group v-model="form.operating">
+                                                    <el-checkbox label="怠速" name="怠速"></el-checkbox>
+                                                    <el-checkbox label="加速" name="加速"></el-checkbox>
+                                                    <el-checkbox label="滑行" name="滑行"></el-checkbox>
+                                                    <el-checkbox label="匀速" name="匀速"></el-checkbox>
+                                                    <el-checkbox label="Tip in & out" name="Tip"></el-checkbox>
+                                                </el-checkbox-group>
+
+<!--                                                <el-radio-group v-model="form.operating">-->
+<!--                                                    <el-radio label="怠速"></el-radio>-->
+<!--                                                    <el-radio label="加速"></el-radio>-->
+<!--                                                    <el-radio label="滑行"></el-radio>-->
+<!--                                                    <el-radio label="匀速"></el-radio>-->
+<!--                                                    <el-radio label="Tip in & out"></el-radio>-->
+<!--                                                </el-radio-group>-->
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 105px">
+                                        <el-col :span="8" style="height: 100px;width:1020px">
+                                            <el-form-item label="档位">
+                                                <el-checkbox-group v-model="form.gears">
+                                                    <el-row style="height: 45px">
+                                                        <el-checkbox-button label="P"></el-checkbox-button>
+                                                        <el-checkbox-button label="N"></el-checkbox-button>
+                                                        <el-checkbox-button label="D"></el-checkbox-button>
+                                                        <el-checkbox-button label="R"></el-checkbox-button>
+                                                    </el-row>
+                                                    <el-row style="height: 45px">
+                                                        <el-checkbox-button label="1"></el-checkbox-button>
+                                                        <el-checkbox-button label="2"></el-checkbox-button>
+                                                        <el-checkbox-button label="3"></el-checkbox-button>
+                                                        <el-checkbox-button label="4"></el-checkbox-button>
+                                                        <el-checkbox-button label="5"></el-checkbox-button>
+                                                        <el-checkbox-button label="6"></el-checkbox-button>
+                                                    </el-row>
+                                                </el-checkbox-group>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="发动机转速">
+                                                <el-input v-model="form.minrpm" placeholder="rpm"
+                                                          style="width:120px;"></el-input>
+                                                ——
+                                                <el-input v-model="form.maxrpm" placeholder="rpm"
+                                                          style="width:120px;"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="车速范围">
+                                                <el-input v-model="form.minkph" placeholder="kph"
+                                                          style="width:120px;"></el-input>
+                                                ——
+                                                <el-input v-model="form.maxkph" placeholder="kph"
+                                                          style="width:120px;"></el-input>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="主观感知">
+                                                <el-checkbox-group v-model="form.subjective">
+                                                    <el-checkbox label="敲击声" name="敲击"></el-checkbox>
+                                                    <el-checkbox label="摩擦声" name="摩擦"></el-checkbox>
+                                                    <el-checkbox label="嗡嗡声" name="嗡嗡"></el-checkbox>
+                                                    <el-checkbox label="啸叫声" name="啸叫"></el-checkbox>
+                                                    <el-checkbox label="嘶嘶声" name="嘶嘶"></el-checkbox>
+                                                </el-checkbox-group>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 85px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="附件">
+                                                <el-upload
+                                                        class="upload-demo"
+                                                        action="http://101.37.66.239:8081/form/post"
+                                                        :accept="'video/*'"
+                                                        :on-preview="handlePreview"
+                                                        :on-remove="handleRemove"
+                                                        :before-remove="beforeRemove"
+                                                        :on-success="handleAvatarSuccess"
+                                                        multiple
+                                                        :limit="1"
+                                                        :data="{SavePath:'/opt/video'}"
+                                                        :on-exceed="handleExceed"
+                                                        :file-list="fileList">
+                                                    <div style="width: 140px">
+                                                    <el-button size="small" type="primary">上传视频</el-button>
+                                                        <span id="spanfile">     </span>
+                                                    </div>
+                                                </el-upload>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <div  style="display:none" >
+                                        <el-row style="height: 60px">
+                                            <el-col :span="8" style="height: 40px;width:1020px">
+                                                <el-form-item label="id" >
+                                                    <el-input v-model="form.abnormalx" id="usernameaxl" style="line-height: 40px"></el-input>
+
+                                                </el-form-item>
+                                            </el-col>
+                                        </el-row>
+                                    </div>
+
+                                </div>
+                            </el-form>
+
+                        </div>
+                    </div>
+
+                    <div class="layui-tab-item">
+
+                    </div>
+
+                </div>
+
+                <div>
+                    <el-button label="上一步" v-if="active!==0" round size="mini" @click="active&#45;&#45;">上一步</el-button>
+                    <el-button label="下一步" round size="mini" @click="next" v-if="active!==1">下一步</el-button>
+                    <el-button round size="mini" @click="submit" v-if="active===1">提交</el-button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="../../static/layui/layui.js" charset="utf-8"></script>
+
+
+
+
+
+
+<style>
+    .el-dropdown-link {
+        cursor: pointer;
+        color: #eee;
+    }
+
+    .el-icon-arrow-down {
+        font-size: 12px;
+    }
+
+    #LAY_layedit_code {
+        text-align: center;
+    }
+
+    .layui-tab-item{
+        width: 1090px;
+        display: none;
+    }
+    .el-step__title.is-process {
+        font-weight: 700;
+        color: #409eff;
+    }
+    .el-step__title.is-wait {
+        color: #303133;
+    }
+    .el-step__head.is-process {
+        color: #409eff;
+        border-color: #409eff;
+    }
+    .el-step__head.is-wait{
+        color: #303133;
+        border-color: #303133;
+    }
+</style>
+
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!--&lt;!&ndash; import JavaScript &ndash;&gt;-->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<script>
+    var qj;
+    function Pusha() {
+
+        $.ajax({
+            url:"http://101.37.66.239:8081/result/get",
+            data:JSON.stringify(usr),
+            type: "POST",
+            async: true,
+            dataType:"json",
+            contentType: "application/json; charset=utf-8",
+
+            success:function(result){
+                $.cookie("code_xpra",result.code);
+                $.cookie("percent",result.active_percent);
+
+
+
+            },
+
+
+
+        })
+
+
+
+    }
+
+    var searchUrl = window.location.href;
+    var searchData = searchUrl.split("="); //截取 url中的“=”,获得“=”后面的参数
+
+    var username=$.cookie('username');
+    var usr={"username":username}
+    var name=$.cookie('name');
+    var str= '<img src="../../static/userimage/0.jpg" class="layui-nav-img" >'+name
+
+
+    document.getElementById("usernameinfo").innerHTML=str;
+
+    var Main = {
+        data() {
+            return {
+                active: 0,
+                form: {
+                    webname: '',
+                    airnumer: '',
+                    reportdate: '',
+                    carbrand: '',
+                    carconfig: '',
+                    carVIN: '',
+                    mileage: '',
+                    engineid: '',
+                    gearboxid: '',
+                    refit: '',
+                    maintain: '',
+                    desc: '',
+                    condition: [],
+                    load: [],
+                    operating: [],
+                    gears: [],
+                    minrpm: '',
+                    maxrpm: '',
+                    minkph: '',
+                    maxKph: '',
+                    subjective: [],
+                    fileList: '',
+                    xprax: '',
+                    abnormalx:'',
+                    refittext:'',
+                    maintaintext:'',
+
+                },
+            };
+        },
+
+        methods: {
+            open1() {
+                this.$prompt('请输入改装记录', 'IMPORTANT', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+                    // inputErrorMessage: '邮箱格式不正确'
+                }).then(({ value }) => {
+                    // this.$message({
+                    //     type: 'success',
+                    //     message: '你的邮箱是: ' + value
+                    // });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });
+                });
+            },
+            open2() {
+                this.$prompt('请输入维修记录', 'IMPORTANT', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    // inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+                    // inputErrorMessage: '邮箱格式不正确'
+                }).then(({ value }) => {
+                    // this.$message({
+                    //     type: 'success',
+                    //     message: '你的邮箱是: ' + value
+                    // });
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });
+                });
+            },
+            next() {
+                if (this.active++ > 1) this.active = 0;
+            },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePreview(file) {
+                console.log(file);
+            },
+            handleExceed(files, fileList) {
+                this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            },
+            handleAvatarSuccess(res, file) {
+                this.form.fileList=res;
+                var filelist={"fileList":res}
+                $.ajax({
+                    url:"http://101.37.66.239:8081/form/fileupdata",
+                    data:JSON.stringify(filelist),
+                    type: "POST",
+                    async: true,
+                    dataType:"json",
+                    contentType: "application/json; charset=utf-8",
+                    success:function(result){
+                      //  this.form.abnormalx = result.abnormalx;
+                        qj=result.abnormalx;
+                       // alert(this.form.abnormalx)
+                       //  this.$message('上传成功')
+                        document.getElementById("spanfile").innerHTML = result.abnormalx+"次/秒";
+
+                    },
+
+                })
+
+            },
+            beforeRemove(file, fileList) {
+                return this.$confirm(`确定移除 ${file.name}？`);
+            },
+            handleCommand(command) {
+                this.$message('click on item ' + command);
+                var twoUrl2 = encodeURI(command+".html"); //使用encodeURI编码
+                location.href = twoUrl2;
+            },
+            first() {
+                // this.$message('click on item ' + command);
+                var twoUrl2 = encodeURI("USER/first.html"); //使用encodeURI编码
+                location.href = twoUrl2;
+            },
+            submit() {
+                $("#usernamea").val($.cookie("username"));
+                this.form.xprax=$.cookie("username");
+                 this.form.abnormalx=qj;
+                console.log(this.form.xprax)
+                console.log(this.form.abnormalx)
+                $.ajax({
+                    url:"http://101.37.66.239:8081/form/add",
+                    data:JSON.stringify(this.form),
+                    type: "POST",
+                    async: true,
+                    dataType:"json",
+                    contentType: "application/json; charset=utf-8",
+                    beforeSend: function(){
+
+                        $("<p class=\"datagrid-mask\"></p>").css({ display: "block", width: "100%", height: $(window).height() }).appendTo("body");
+                        $("<p class=\"datagrid-mask-msg\"></p>").html("正在提交,请稍候...").appendTo("body").css({ display: "block", left: ($(document.body).outerWidth(true) - 190) / 2, top: ($(window).height() - 45) / 2 });
+                    },
+                    complete: function() {
+                        $(".datagrid-mask").remove();
+                        $(".datagrid-mask-msg").remove();
+                    },
+
+                    success:function(result){
+
+                      alert("提交成功")
+                        var twoUrl = encodeURI("list.html"); //使用encodeURI编码
+                        location.href = twoUrl;
+
+
+                    },
+
+                })
+            }
+        }
+    }
+    var Ctor = Vue.extend(Main)
+    var Ctor2 = Vue.extend(Main)
+    new Ctor().$mount('#el-form-steps')
+    new Ctor2().$mount('#xpra')
+
+</script>
+</html>

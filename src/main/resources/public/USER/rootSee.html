@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XX检测平台</title>
+    <link rel="icon" href="../../static/demo1/img/013.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all"/>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body class="layui-layout-body">
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/jquery.cookie.js"></script>
+<!--<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>-->
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <ul class="layui-nav" >
+            <li class="layui-nav-item">
+                <a href="http://localhost:8081/USER/rootTable.html">问题状态</a></li>
+            <!--<li class="layui-nav-item">
+                <a>故障维修</a></li>-->
+        </ul>
+        <!--<div class="layui-logo" id="xpra">
+            <el-dropdown  @command="handleCommand">
+            <span class="el-dropdown-link">信息<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i></span>
+            <el-dropdown-menu slot="dropdown" simple>
+                <el-dropdown-item command="rootTable">信息显示</el-dropdown-item>
+            </el-dropdown-menu>
+        </el-dropdown>
+        </div>-->
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:" id="usernameinfo">
+                    <!--<img src="../../static/demo1/img/img-01.jpg" class="layui-nav-img">
+                    admin-->
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="http://localhost:8081/">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-tab layui-tab-brief" lay-filter="demoTitle">
+        <div class="layui-body layui-tab-content site-demo site-demo-body">
+
+            <div id="el-form-steps">
+
+
+                <div class="layui-tab-item layui-show">
+
+                    <el-steps :active="active" finish-status="success" simple>
+                        <el-step title="问题信息" ></el-step>
+                        <el-step title="诊断结果" ></el-step>
+                        <el-step title="问题状态" ></el-step>
+                    </el-steps>
+                    <div class="layui-main">
+                        <div id="LAY_preview">
+                            <div style="height: 10px"></div>
+                            <el-row>
+                            <el-form ref="form" :model="form" label-width="100px" class="layui-form" action="">
+
+                                <div v-if="active==0" id="active0">
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="网站名称" id = "webname">
+<!--                                                山东省济南市4S店-->
+<!--                                                <el-input v-model="form.webname" style="line-height: 40px"></el-input>-->
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="当地气温" id="airnumer">
+<!--                                                26-->
+<!--                                                <el-input v-model="form.airnumer" style="width:200px;"/>-->
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="上报日期" id="reportdate">
+<!--                                                2021-05-01-->
+                                                <!--<el-date-picker type="date" placeholder="选择日期" v-model="form.reportdate"
+                                                                style="width:200px;"></el-date-picker>-->
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="车辆品牌" id="carbrand">
+<!--                                                一汽大众-->
+<!--                                                <el-input v-model="form.carbrand" style="width:200px;"/>-->
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="车辆配置" id="carconfig">
+                                                高配
+<!--                                                <el-input v-model="form.carconfig" style="width:200px;"/>-->
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="车辆VIN" id="carVIN">
+<!--                                                123-->
+<!--                                                <el-input v-model="form.carVIN" style="width:200px;"/>-->
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="行驶里程" id="mileage">
+<!--                                                123-->
+<!--                                                <el-input v-model="form.mileage" style="width:200px;"/>-->
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="发动机号" id="engineid">
+<!--                                                123-->
+<!--                                                <el-input v-model="form.engineid" style="width:200px;"/>-->
+                                            </el-form-item>
+                                        </el-col>
+                                        <el-col :span="8" style="height: 40px;width:340px">
+                                            <el-form-item label="变速箱号" id="gearboxid">
+<!--                                                123-->
+<!--                                                <el-input v-model="form.gearboxid" style="width:200px;"/>-->
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="是否改装"id="refit">
+<!--                                                否-->
+                                                <!--<el-radio-group v-model="form.refit">
+                                                    <el-radio label="是"></el-radio>
+                                                    <el-radio label="否"></el-radio>
+                                                    <el-radio label="禁用" disabled="true"></el-radio>
+                                                </el-radio-group>-->
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="维修经历" id="maintain">
+<!--                                                无-->
+                                                <!--<el-radio-group v-model="form.maintain">
+                                                    <el-radio label="有"></el-radio>
+                                                    <el-radio label="无"></el-radio>
+                                                    <el-radio label="禁用" disabled="true"></el-radio>
+                                                </el-radio-group>-->
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 100px">
+                                        <el-col :span="8" style="width:1020px">
+                                            <el-form-item label="问题描述" id="desc">
+                                                <!--问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述
+                                                问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述问题描述v
+                                                <el-input :rows=3 type="textarea" v-model="form.desc"></el-input>-->
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="发动机状态" id="condition">
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="负荷" id="load">
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="工况" id="operating">
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="档位" id="gears">
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="发动机转速">
+                                                <div id="rpm"></div>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="车速范围">
+                                                <div id="kph"></div>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 55px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="主观感知" id="subjective">
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 60px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="异响次数" id="abnormal">
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+
+                                    <el-row style="height: 85px">
+                                        <el-col :span="8" style="height: 40px;width:1020px">
+                                            <el-form-item label="附件">
+                                                <a href="" id="xiaA">下载视频</a>
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+
+                                <div v-if="active==1">
+                                    <el-row style="height: 90px">
+                                        <el-col :span="8" style="width:1020px">
+                                            <el-form-item label="系统(自动)诊断" label-width="120px" id="resultt">
+
+
+                                            </el-form-item>
+                                        </el-col>
+                                    </el-row>
+                                </div>
+                            </el-form>
+                            <div v-if="active==2">
+                                <div style="height: 80px">
+                                    <div style="height: 20px"></div>
+                                </div>
+
+                                <div>
+                                    <row style="display:inline-block;text-align:center;width:1020px;" id="elProId">
+                                    </row>
+                                    <div style="height: 30px"></div>
+
+                                    <div id="elStId"></div>
+
+                                </div>
+
+                                <div style="height: 20px"></div>
+                                <div id="repairs">
+
+                                </div>
+
+                            </div>
+                            </el-row>
+                        </div>
+                    </div>
+
+                    <div class="layui-tab-item">
+
+                    </div>
+
+                </div>
+
+                <el-row>
+                <div>
+                    <el-button label="上一步" v-if="active!==0" round size="mini" @click="active&#45;&#45;">上一步</el-button>
+                    <el-button label="下一步" round size="mini" @click="next" v-if="active!==2">下一步</el-button>
+                </div>
+                </el-row>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script src="../../static/layui/layui.js" charset="utf-8"></script>
+
+
+<style>
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+    .clearfix:after {
+        clear: both
+    }
+
+    .box-card {
+        width: 1020px;
+    }
+    .el-dropdown-link {
+        cursor: pointer;
+        color: #eee;
+    }
+
+    .el-icon-arrow-down {
+        font-size: 12px;
+    }
+
+    #LAY_layedit_code {
+        text-align: center;
+    }
+
+    .layui-tab-item{
+        width: 1090px;
+        display: none;
+    }
+    .el-step__title.is-process {
+        font-weight: 700;
+        color: #409eff;
+    }
+    .el-step__title.is-wait {
+        color: #303133;
+    }
+    .el-step__head.is-process {
+        color: #409eff;
+        border-color: #409eff;
+    }
+    .el-step__head.is-wait{
+        color: #303133;
+        border-color: #303133;
+    }
+</style>
+
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!--&lt;!&ndash; import JavaScript &ndash;&gt;-->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+
+    var username=$.cookie('username');
+    var name=$.cookie('name');
+    var usr={"username":username};
+    var id = {"id":$.cookie('id')};
+    console.log(id);
+
+    var webname;
+    var airnumer;
+    var reportdate;
+    var carbrand;
+    var carconfig;
+    var carVIN;
+    var mileage;
+    var engineid;
+    var gearboxid;
+    var refit;
+    var maintain;
+    var desc;
+    var condition;
+    var load;
+    var operating;
+    var gears;
+    var minrpm;
+    var maxrpm;
+    var minkph;
+    var maxKph;
+    var subjective;
+    var abnormal;
+    var resultt;
+
+    var formObj;
+
+    var result_get;
+    var waya;
+    var resulta;
+
+    var str= '<img src="../../static/userimage/2.jpg" class="layui-nav-img" >'+name;
+    Pusha()
+    function Pusha() {
+
+        $.ajax({
+            url:"http://localhost:8081/farc/getFarc",
+            data:JSON.stringify(id),
+            type: "POST",
+            dataType:"json",
+            contentType: "application/json; charset=utf-8",
+
+            success:function(result){
+
+                // json = JSON.parse(result.describe);
+                $.cookie("code_xpra",result.statue);
+                $.cookie("percent",result.percent);
+                $.cookie("describe",JSON.stringify(result.describe));
+                // $.cookie("informationForm",JSON.stringify(result.informationForm));
+                $.cookie("resultt",result.resultt);
+                console.log(result.describe);
+
+                formObj = JSON.parse(result.informationForm);
+                console.log(formObj);
+                document.getElementById("webname").innerHTML=formObj.webname;
+                document.getElementById("airnumer").innerHTML=formObj.airnumer;
+                document.getElementById("reportdate").innerHTML=formObj.reportdate;
+                document.getElementById("carbrand").innerHTML=formObj.carbrand;
+                document.getElementById("carconfig").innerHTML=formObj.carconfig;
+                document.getElementById("carVIN").innerHTML=formObj.carVIN;
+                document.getElementById("mileage").innerHTML=formObj.mileage;
+                document.getElementById("engineid").innerHTML=formObj.engineid;
+                document.getElementById("gearboxid").innerHTML=formObj.gearboxid;
+                document.getElementById("refit").innerHTML=formObj.refit;
+                document.getElementById("maintain").innerHTML=formObj.maintain;
+                document.getElementById("desc").innerHTML=formObj.desc;
+                document.getElementById("condition").innerHTML=formObj.condition;
+                document.getElementById("load").innerHTML=formObj.load;
+                document.getElementById("operating").innerHTML=formObj.operating;
+                document.getElementById("gears").innerHTML=formObj.gears;
+                document.getElementById("rpm").innerHTML=formObj.minrpm+'—'+formObj.maxrpm;
+                // document.getElementById("maxrpm").innerHTML=formObj.maxrpm;
+                document.getElementById("kph").innerHTML=formObj.minkph+'—'+formObj.maxKph;
+                // document.getElementById("maxKph").innerHTML=formObj.maxKph;
+                document.getElementById("subjective").innerHTML=formObj.subjective;
+                document.getElementById("abnormal").innerHTML=formObj.abnormal+"  次/秒";
+
+                document.getElementById("xiaA").getAttributeNode("href").value = "http://localhost:8081/form/downloadFile?path="+formObj.fileList;
+
+                //反馈
+                document.getElementById("resultt").innerHTML=result.resultt;
+                var obj = document.getElementById("resultt");
+                var elLabel;
+                if ("0"=== result.resultIf){
+                    elLabel="系统(自动)诊断";
+                } else {
+                    elLabel="专家(人工)诊断";
+                }
+                obj.getAttributeNode("label").value = elLabel;
+
+                document.getElementById("elProId").innerHTML='<el-progress :width="300" :height="300" type="circle" :percentage="'+result.percent+'"></el-progress>';
+
+                var elStIdStr = '<el-steps :active="'+result.statue+'" align-center id="hang">';
+                var describe=JSON.parse(result.describe);
+                var length=describe.length;
+                for (i=0;i<length;i++){
+                    var a=[];
+                    for (var key in describe[i]){
+                        a.push(describe[i][key])
+                        // console.log(key,describe[i][key])
+                    }
+                    elStIdStr += '<el-step title="'+a[1]+'"></el-step>';
+                }
+                elStIdStr += '</el-steps>';
+                document.getElementById("elStId").innerHTML=elStIdStr;
+            //开始
+                var listRepair = result.listRepair;
+                console.log(listRepair);
+                var listRepairStr = "";
+                for (i = 0; i < listRepair.length; i++){
+                    var repair = listRepair[i];
+                listRepairStr += '<el-card class="box-card">';
+                listRepairStr += '  <div slot="header" class="clearfix">\n' +
+                    '    <span>维修记录'+(i+1)+'</span>\n' +
+                    '  </div>';
+                listRepairStr+= '<div class="text item">维修日期：'+repair.repairdate+'</div>';
+                listRepairStr+= '<div class="text item">更换零件名称：'+repair.repairname+'</div>';
+                listRepairStr+= '<div class="text item">详细维修内容：'+repair.repairdocs+'</div>';
+                listRepairStr+= '<div class="text item">其他：'+repair.repairload+'</div>';
+                listRepairStr+= '<div class="text item">维修结果：'+repair.whether+'</div>';
+                listRepairStr+='</el-card>';
+                }
+                document.getElementById("repairs").innerHTML=listRepairStr;
+            //结束
+            },
+
+        })
+
+    }
+
+    document.getElementById("usernameinfo").innerHTML=str;
+
+
+
+    setTimeout(function() {
+            var Main = {
+
+                data() {
+
+                    return {
+                        tableData: result_get,
+                        active: 0
+
+                    }
+                },
+
+                methods: {
+                    next() {
+                        if (this.active++ > 3) this.active = 0;
+                    },
+                    handleCommand(command) {
+                        this.$message('click on item ' + command);
+                        var twoUrl2 = encodeURI(command+".html"); //使用encodeURI编码
+                        location.href = twoUrl2;
+                    },
+                    handleinto1(index, row) {
+
+                        console.log(index, row.__ob__.value.id);
+                        usr={"username":username,"id":row.__ob__.value.id}
+                        $.cookie("id",row.__ob__.value.id);
+                        Pusha();
+                        console.log($.cookie("describe"))
+                        var twoUrl = encodeURI("result.html"); //使用encodeURI编码
+                        location.href = twoUrl;
+
+                    },
+                    handleinto2(index, row) {
+                        console.log(index, row.__ob__.value.id);
+                        usr={"username":username,"id":row.__ob__.value.id}
+                        $.cookie("id",row.__ob__.value.id);
+                        resulta()
+                        this.$alert(resultaa, waya, {
+                            confirmButtonText: '知悉',
+                            callback: action => {
+                                this.$message({
+                                    type: 'info',
+                                    message: `action: ${ action }`
+                                });
+                            }
+                        })
+                    }
+
+                }
+            }
+            var Ctor = Vue.extend(Main)
+            new Ctor().$mount('#el-form-steps')
+        },
+        2000);
+
+</script>
+</html>

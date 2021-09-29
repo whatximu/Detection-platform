@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>异响检测平台</title>
+    <link rel="icon" href="../../static/demo1/img/013.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all"/>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body class="layui-layout-body">
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/jquery.cookie.js"></script>
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <ul class="layui-nav" >
+            <li class="layui-nav-item">
+                <a href="http://101.37.66.239:8081/USER/adminTable.html">问题处理</a></li>
+            <li class="layui-nav-item">
+                <a href="http://101.37.66.239:8081/USER/adminResultTable.html">问题列表</a></li>
+        </ul>
+
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;" id="usernameinfo">
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="http://101.37.66.239:8081/">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-tab layui-tab-brief" lay-filter="demoTitle">
+        <div class="layui-body layui-tab-content site-demo site-demo-body">
+
+            <div id="el-form-steps">
+
+
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-main">
+                        <div id="LAY_preview">
+                            <div style="height: 80px">
+                                <div style="height: 20px"></div>
+                                <h2>处理进度</h2>
+                            </div>
+
+                            <div>
+                                <row style="display:inline-block;text-align:center;width:1020px;" id="elProId">
+                                 </row>
+                                <div style="height: 30px"></div>
+                               <div id="elStId"></div>
+                                <div style="height: 20px"></div>
+                                <div id="repairs">
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script src="../../static/layui/layui.js" charset="utf-8"></script>
+<!--<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>-->
+
+<style>
+    .text {
+        font-size: 14px;
+    }
+
+    .item {
+        margin-bottom: 18px;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+        display: table;
+        content: "";
+    }
+    .clearfix:after {
+        clear: both
+    }
+
+    .box-card {
+        width: 1020px;
+    }
+    .el-dropdown-link {
+        cursor: pointer;
+        color: #eee;
+    }
+
+    .el-icon-arrow-down {
+        font-size: 12px;
+    }
+
+    #LAY_layedit_code {
+        text-align: center;
+    }
+    .layui-tab-item{
+        width: 1090px;
+        display: none;
+    }
+</style>
+
+</body>
+
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!--&lt;!&ndash; import JavaScript &ndash;&gt;-->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    var username=$.cookie("username");
+    var name=$.cookie("name");
+    var usr={"username":username}
+    var id = {"id":$.cookie('id')};
+    console.log(id);
+    var result_get;
+
+    var waya;
+    var resulta;
+    app();
+
+    function app(){
+        $.ajax({
+            url:"http://101.37.66.239:8081/result/getAdminResult",
+            data:JSON.stringify(id),
+            type: "POST",
+            dataType:"json",
+            contentType: "application/json; charset=utf-8",
+
+            success:function(result){
+
+                document.getElementById("elProId").innerHTML='<el-progress :width="300" :height="300" type="circle" :percentage="'+result.percent+'"></el-progress>';
+
+                var elStIdStr = '<el-steps :active="'+result.statue+'" align-center id="hang">';
+                var describe=JSON.parse(result.describe);
+                var length=describe.length;
+                for (i=0;i<length;i++){
+                    var a=[];
+                    for (var key in describe[i]){
+                        a.push(describe[i][key])
+                        // console.log(key,describe[i][key])
+                    }
+                    elStIdStr += '<el-step title="'+a[1]+'"></el-step>';
+                }
+                elStIdStr += '</el-steps>';
+                console.log(elStIdStr);
+                document.getElementById("elStId").innerHTML=elStIdStr;
+                var listRepair = result.listRepair;
+                console.log(listRepair);
+                var listRepairStr = "";
+                for (i = 0; i < listRepair.length; i++){
+                    var repair = listRepair[i];
+                    listRepairStr += '<el-card class="box-card">';
+                    listRepairStr += '  <div slot="header" class="clearfix">\n' +
+                        '    <span>维修记录'+(i+1)+'</span>\n' +
+                        '  </div>';
+                    listRepairStr+= '<div class="text item">维修日期：'+repair.repairdate+'</div>';
+                    listRepairStr+= '<div class="text item">更换零件名称：'+repair.repairname+'</div>';
+                    listRepairStr+= '<div class="text item">详细维修内容：'+repair.repairdocs+'</div>';
+                    listRepairStr+= '<div class="text item">其他：'+repair.repairload+'</div>';
+                    listRepairStr+= '<div class="text item">维修结果：'+repair.whether+'</div>';
+                    listRepairStr+='</el-card>';
+                }
+                document.getElementById("repairs").innerHTML=listRepairStr;
+            },
+
+        });
+    }
+
+    var str= '<img src="../../static/userimage/1.jpg" class="layui-nav-img" >'+name;
+    document.getElementById("usernameinfo").innerHTML=str;
+
+    setTimeout(function() {
+            var Main = {
+                methods: {
+                    handleCommand(command) {
+                        this.$message("click on item " + command);
+                        var twoUrl2 = encodeURI(command+".html"); //使用encodeURI编码
+                        location.href = twoUrl2;
+                    },
+
+                }
+            }
+            var Ctor = Vue.extend(Main);
+            new Ctor().$mount('#el-form-steps');
+        },
+        2000);
+
+
+</script>
+</html>

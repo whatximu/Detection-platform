@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>异响检测平台</title>
+    <link rel="icon" href="../../static/demo1/img/013.png" type="image/x-icon">
+    <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all"/>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body class="layui-layout-body">
+<!--<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>-->
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/jquery.cookie.js"></script>
+
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header" >
+        <div class="layui-logo" id="xpra">
+
+            <el-dropdown   @command="handleCommand" >
+                <span class="el-dropdown-link">首页<i class="el-icon-arrow-down el-icon--right"></i></span>
+                <el-dropdown-menu slot="dropdown">
+<!--                    <el-dropdown-item command="first">首页</el-dropdown-item>-->
+                    <el-dropdown-item command="form">信息提交</el-dropdown-item>
+                    <el-dropdown-item command="list">订单</el-dropdown-item>
+                    <el-dropdown-item>损坏信息</el-dropdown-item>
+                    <el-dropdown-item>结果</el-dropdown-item>
+                </el-dropdown-menu>
+            </el-dropdown>
+
+        </div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;" id="usernameinfo">
+
+                </a>
+
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="index.jsp">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-tab layui-tab-brief" lay-filter="demoTitle">
+        <div class="layui-body layui-tab-content site-demo site-demo-body">
+
+            <div id="el-form-steps">
+
+
+                <div class="layui-tab-item layui-show">
+
+                    <el-steps :active="active" finish-status="success" simple>
+                        <el-step title="基本信息" ></el-step>
+                        <el-step title="相关情况" ></el-step>
+                    </el-steps>
+                    <div class="layui-main">
+                        <div id="LAY_preview">
+                            <div style="height: 10px"></div>
+                            <el-form ref="form" :model="form" label-width="100px" class="layui-form" action="">
+
+
+                            </el-form>
+
+                        </div>
+                    </div>
+
+                    <div class="layui-tab-item">
+
+                    </div>
+
+                </div>
+
+                <div>
+                    <el-button label="上一步" v-if="active!==0" round size="mini" @click="active&#45;&#45;">上一步</el-button>
+                    <el-button label="下一步" round size="mini" @click="next" v-if="active!==1">下一步</el-button>
+                    <el-button round size="mini" @click="submit" v-if="active===1">提交</el-button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<script src="../../static/layui/layui.js" charset="utf-8"></script>
+
+
+
+
+
+
+<style>
+    .el-dropdown-link {
+        cursor: pointer;
+        color: #eee;
+    }
+
+    .el-icon-arrow-down {
+        font-size: 12px;
+    }
+
+    #LAY_layedit_code {
+        text-align: center;
+    }
+
+    .layui-tab-item{
+        width: 1090px;
+        display: none;
+    }
+    .el-step__title.is-process {
+        font-weight: 700;
+        color: #409eff;
+    }
+    .el-step__title.is-wait {
+        color: #303133;
+    }
+    .el-step__head.is-process {
+        color: #409eff;
+        border-color: #409eff;
+    }
+    .el-step__head.is-wait{
+        color: #303133;
+        border-color: #303133;
+    }
+</style>
+
+</body>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<!--&lt;!&ndash; import JavaScript &ndash;&gt;-->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+<script>
+
+
+
+    var searchUrl = window.location.href;
+    var searchData = searchUrl.split("="); //截取 url中的“=”,获得“=”后面的参数
+    var username=$.cookie('username');
+    var name=$.cookie('name');
+    var str= '<img src="../../static/userimage/0.jpg" class="layui-nav-img" >'+name
+    document.getElementById("usernameinfo").innerHTML=str;
+    var Main = {
+        data() {
+            return {
+                active: 0,
+                form: {
+                    webname: '',
+                    airnumer: '',
+                    reportdate: '',
+                    carbrand: '',
+                    carconfig: '',
+                    carVIN: '',
+                    mileage: '',
+                    engineid: '',
+                    gearboxid: '',
+                    refit: '',
+                    maintain: '',
+                    desc: '',
+                    condition: [],
+                    load: [],
+                    operating: '',
+                    gears: [],
+                    minrpm: '',
+                    maxrpm: '',
+                    minkph: '',
+                    maxKph: '',
+                    subjective: [],
+                    fileList: ''
+                },
+            };
+        },
+
+        methods: {
+            next() {
+                if (this.active++ > 1) this.active = 0;
+            },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePreview(file) {
+                console.log(file);
+            },
+            handleExceed(files, fileList) {
+                this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            },
+            handleAvatarSuccess(res, file) {
+                console.log(res)
+                alert(res)
+                this.form.fileList=res
+                alert(this.form.fileList)
+                this.$message.success('上传成功')
+            },
+            beforeRemove(file, fileList) {
+                return this.$confirm(`确定移除 ${file.name}？`);
+            },
+            handleCommand(command) {
+                this.$message('click on item ' + command);
+                var twoUrl2 = encodeURI(command+".html"); //使用encodeURI编码
+                location.href = twoUrl2;
+            },
+            first() {
+                // this.$message('click on item ' + command);
+                var twoUrl2 = encodeURI("USER/first.html"); //使用encodeURI编码
+                location.href = twoUrl2;
+            },
+            submit() {
+                console.log(this.form)
+                $.ajax({
+                    url:"http://101.37.66.239:8081/form/add",
+                    data:JSON.stringify(this.form),
+                    type: "POST",
+                    async: true,
+                    dataType:"json",
+                    contentType: "application/json; charset=utf-8",
+                    beforeSend: function(){
+                        $("<p class=\"datagrid-mask\"></p>").css({ display: "block", width: "100%", height: $(window).height() }).appendTo("body");
+                        $("<p class=\"datagrid-mask-msg\"></p>").html("正在提交,请稍候...").appendTo("body").css({ display: "block", left: ($(document.body).outerWidth(true) - 190) / 2, top: ($(window).height() - 45) / 2 });
+                    },
+                    complete: function() {
+                        $(".datagrid-mask").remove();
+                        $(".datagrid-mask-msg").remove();
+                    },
+
+                    success:function(result){
+
+                        $("#div1").html();
+                        var twoUrl = encodeURI("result.html?num=" + result.code+"&&percent=25"); //使用encodeURI编码
+                        location.href = twoUrl;
+
+
+                    },
+                    // data:"POST",
+
+
+                })
+            }
+        }
+    }
+    var Ctor = Vue.extend(Main)
+    var Ctor2 = Vue.extend(Main)
+    new Ctor().$mount('#el-form-steps')
+    new Ctor2().$mount('#xpra')
+
+</script>
+</html>
